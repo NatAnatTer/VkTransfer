@@ -6,12 +6,9 @@ var sumVisa: Long = 0
 var sumMir: Long = 0
 var sumVkPay: Long = 0
 fun main() {
-
-    //  var sumPreviousTransfer: Long = 0
-
     while (true) {
         println(
-            "Выберите способ перевода: " + "\n" +
+            "Выберите способ перевода (введите порядковый номер): " + "\n" +
                     "1 Mastercard" + "\n" +
                     "2 Maestro" + "\n" +
                     "3 Visa" + "\n" +
@@ -20,28 +17,28 @@ fun main() {
         )
         val typeOfCardUerChoice = scan.nextInt()
 
-        println("Введите сумму перевода")
-        var sumTransfer = scan.nextLong()
+        println("Введите сумму перевода в копейках")
+        val sumTransfer = scan.nextLong()
 
 
-        var typeOfCard = when (typeOfCardUerChoice) {
+        val typeOfCard = when (typeOfCardUerChoice) {
             1 -> "Mastercard"
             2 -> "Maestro"
             3 -> "Visa"
-            4 -> "Мир"
+            4 -> "Mir"
             5 -> "VK Pay"
             else -> "VK Pay"
         }
-        if (isAvailableLimits(typeOfCard, sumPreviousTransfer(typeOfCard), sumTransfer)) {
-
-        } else {
+        if (!isAvailableLimits(typeOfCard, sumPreviousTransfer(typeOfCard), sumTransfer)) {
             println("Превышен лимит на перевод")
             continue
         }
 
         val totalCommission = calculateCommission(typeOfCard, sumPreviousTransfer(typeOfCard), sumTransfer)
 
+        println("Комиссия: $totalCommission копеек")
 
+        sumPreviousAfterTransfer(typeOfCard, sumTransfer)
     }
 }
 
@@ -50,16 +47,34 @@ fun sumPreviousTransfer(typeOfCard: String): Long {
         "Mastercard" -> sumMastercard
         "Maestro" -> sumMaestro
         "Visa" -> sumVisa
-        "Мир" -> sumMir
+        "Mir" -> sumMir
         "VK Pay" -> sumVkPay
         else -> sumVkPay
 
     }
 }
 
-
-fun calculateCommission(typeOfCard: String, sumPreviousTransfer: Long, sumTransfer: Long) {
+fun sumPreviousAfterTransfer(typeOfCard: String, sumTransfer: Long) {
     when (typeOfCard) {
+        "Mastercard" -> sumMastercard += sumTransfer
+        "Maestro" -> sumMaestro += sumTransfer
+        "Visa" -> sumVisa += sumTransfer
+        "Mir" -> sumMir += sumTransfer
+        "VK Pay" -> sumVkPay += sumTransfer
+        else -> sumVkPay += sumTransfer
+    }
+    println(
+        "Mastercard = $sumMastercard" + "\n" +
+                "Maestro = $sumMaestro" + "\n" +
+                "Visa = $sumVisa" + "\n" +
+                "Мир = $sumMir" + "\n" +
+                "VK Pay = $sumVkPay"
+    )
+}
+
+
+fun calculateCommission(typeOfCard: String, sumPreviousTransfer: Long, sumTransfer: Long): Double {
+    return when (typeOfCard) {
         "Mastercard" -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
         "Maestro" -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
         "Visa" -> calculateVisaMir(sumTransfer)
@@ -70,14 +85,19 @@ fun calculateCommission(typeOfCard: String, sumPreviousTransfer: Long, sumTransf
 }
 
 fun calculateMastercardMaestro(sumPreviousTransfer: Long, sumTransfer: Long): Double {
+    val maxTransfer = 75_000_00
+    val commissionPercent = 0.006
+    val commissionConstant = 20_00
     return when (sumPreviousTransfer + sumTransfer) {
-        in 0..75_000_00 -> 0.0
-        else -> sumTransfer * 0.006 + 20_00
+        in 0..maxTransfer -> 0.0
+        else -> sumTransfer * commissionPercent + commissionConstant
     }
 }
 
 fun calculateVisaMir(sumTransfer: Long): Double {
-    return sumTransfer * 0.0075 + 35_00
+    val commissionPercent = 0.0075
+    val commissionConstant = 35_00
+    return sumTransfer * commissionPercent + commissionConstant
 }
 
 
