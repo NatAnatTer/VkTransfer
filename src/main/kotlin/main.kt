@@ -5,7 +5,7 @@ fun main() {
     var sumMir: Int = 0
     var sumVkPay: Int = 0
 
-    var typeOfCard = "Vk Pay"
+    var typeOfCard : TypeOfCard = TypeOfCard.VK_PAY
 
     while (true) {
         println(
@@ -18,26 +18,26 @@ fun main() {
                     "6 End"
 
         )
-        val typeOfCardUerChoice = Integer.valueOf(readLine())
+        val typeOfCardUerChoice = readLine()?.toUInt() ?: return
+            if(typeOfCardUerChoice > 6U) {
+                println("Введена не верная команда, повторите попытку снова")
+                continue
+            }
+
+
         typeOfCard = when (typeOfCardUerChoice) {
-            1 -> "Mastercard"
-            2 -> "Maestro"
-            3 -> "Visa"
-            4 -> "Mir"
-            5 -> "VK Pay"
-            6 -> break
-            else -> "не правильный ввод"
-        }
-        if (typeOfCard == "не правильный ввод") {
-            println("не правильный ввод, повторите попытку")
-            continue
+            1U -> TypeOfCard.MASTERCARD
+            2U -> TypeOfCard.MAESTRO
+            3U -> TypeOfCard.VISA
+            4U -> TypeOfCard.MIR
+            5U -> TypeOfCard.VK_PAY
+            else -> break
         }
 
+        print("Введите сумму перевода в копейках: ")
+        val sumTransfer = readLine()?.toUInt() ?: return
 
-        println("Введите сумму перевода в копейках")
-        val sumTransfer = Integer.valueOf(readLine())
-
-        if (sumTransfer < 0) {
+        if (sumTransfer == 0U) {
             println("Введена не допустимая сумма")
             continue
         }
@@ -62,21 +62,21 @@ fun main() {
 
         // sumPreviousAfterTransfer(typeOfCard, sumTransfer, sumMastercard, sumMaestro, sumVisa, sumMir, sumVkPay)
 
-        when (typeOfCard) {
-            "Mastercard" -> sumMastercard += sumTransfer
-            "Maestro" -> sumMaestro += sumTransfer
-            "Visa" -> sumVisa += sumTransfer
-            "Mir" -> sumMir += sumTransfer
-            "VK Pay" -> sumVkPay += sumTransfer
-            else -> sumVkPay += sumTransfer
-        }
-        println(
-            "Mastercard = $sumMastercard" + "\n" +
-                    "Maestro = $sumMaestro" + "\n" +
-                    "Visa = $sumVisa" + "\n" +
-                    "Мир = $sumMir" + "\n" +
-                    "VK Pay = $sumVkPay"
-        )
+//        when (typeOfCard) {
+//            "Mastercard" -> sumMastercard += sumTransfer
+//            "Maestro" -> sumMaestro += sumTransfer
+//            "Visa" -> sumVisa += sumTransfer
+//            "Mir" -> sumMir += sumTransfer
+//            "VK Pay" -> sumVkPay += sumTransfer
+//            else -> sumVkPay += sumTransfer
+//        }
+//        println(
+//            "Mastercard = $sumMastercard" + "\n" +
+//                    "Maestro = $sumMaestro" + "\n" +
+//                    "Visa = $sumVisa" + "\n" +
+//                    "Мир = $sumMir" + "\n" +
+//                    "VK Pay = $sumVkPay"
+//        )
     }
 }
 
@@ -127,13 +127,13 @@ fun sumPreviousTransfer(
 //}
 
 
-fun calculateCommission(typeOfCard: String, sumPreviousTransfer: Int, sumTransfer: Int): Double {
+fun calculateCommission(typeOfCard: TypeOfCard, sumPreviousTransfer: Int, sumTransfer: Int): Double {
     return when (typeOfCard) {
-        "Mastercard" -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
+       /* "Mastercard" -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
         "Maestro" -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
         "Visa" -> calculateVisaMir(sumTransfer)
         "Mir" -> calculateVisaMir(sumTransfer)
-        "VK Pay" -> 0.0
+        "VK Pay" -> 0.0*/
         else -> 0.0
     }
 }
