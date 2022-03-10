@@ -18,9 +18,16 @@ fun main() {
                     "6 End"
 
         )
-        val typeOfCardUerChoice = readLine()?.toUInt() ?: return
+
+        val typeOfCardUerChoice: UInt
+        try {
+            typeOfCardUerChoice = readLine()?.toUInt() ?: return
+        } catch (e: Exception) {
+            println("Введена не допустимая команда")
+            continue
+        }
         if (typeOfCardUerChoice > 6U) {
-            println("Введена не верная команда, повторите попытку снова")
+            println("Введена не допустимая команда, повторите попытку снова")
             continue
         }
 
@@ -35,12 +42,14 @@ fun main() {
         }
 
         print("Введите сумму перевода в копейках: ")
-        val sumTransfer = readLine()?.toUInt() ?: return
-
-        if (sumTransfer == 0U) {
+        val sumTransfer: UInt
+        try {
+            sumTransfer = readLine()?.toUInt() ?: return
+        } catch (e: Exception) {
             println("Введена не допустимая сумма")
             continue
         }
+
         val sumPrevious = sumPreviousTransfer(typeOfCard, sumMastercard, sumMaestro, sumVisa, sumMir, sumVkPay)
         if (!isAvailableLimits(
                 typeOfCard,
@@ -54,7 +63,7 @@ fun main() {
 
         val totalCommission = calculateCommission(
             typeOfCard,
-            sumPreviousTransfer(typeOfCard, sumMastercard, sumMaestro, sumVisa, sumMir, sumVkPay),
+            sumPrevious,
             sumTransfer
         )
 
