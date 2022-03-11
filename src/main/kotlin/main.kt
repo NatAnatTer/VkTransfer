@@ -1,3 +1,12 @@
+const val MAX_TRANSFER_MASTERCARD_MAESTRO = 75_000_00U
+const val COMMISSION_PERCENT_MASTERCARD_MAESTRO = 0.006
+const val COMMISSION_CONSTANT_MASTERCARD_MAESTRO = 20_00U
+const val COMMISSION_PERCENT_VISA_MIR = 0.0075
+const val COMMISSION_CONSTANT_VISA_MIR = 35_00U
+const val LIMIT_OF_CARDS = 600_000_00U
+const val LIMIT_VK_PAY_DAY = 40_000_00U
+const val LIMIT_VK_PAY = 15_000_00U
+
 fun main() {
     var sumMastercard: UInt = 0U
     var sumMaestro: UInt = 0U
@@ -104,45 +113,38 @@ fun sumPreviousTransfer(
     }
 }
 
-fun calculateCommission(typeOfCard: TypeOfCard, sumPreviousTransfer: UInt, sumTransfer: UInt): UInt {
+fun calculateCommission(
+    typeOfCard: TypeOfCard = TypeOfCard.VK_PAY,
+    sumPreviousTransfer: UInt,
+    sumTransfer: UInt
+): UInt {
     return when (typeOfCard) {
-        TypeOfCard.MASTERCARD -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
-        TypeOfCard.MAESTRO -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
-        TypeOfCard.VISA -> calculateVisaMir(sumTransfer)
-        TypeOfCard.MIR -> calculateVisaMir(sumTransfer)
+        TypeOfCard.MASTERCARD, TypeOfCard.MAESTRO -> calculateMastercardMaestro(sumPreviousTransfer, sumTransfer)
+        TypeOfCard.VISA, TypeOfCard.MIR -> calculateVisaMir(sumTransfer)
         TypeOfCard.VK_PAY -> 0U
     }
 }
 
-fun calculateMastercardMaestro(sumPreviousTransfer: UInt, sumTransfer: UInt): UInt {
-    val maxTransfer = 75_000_00U
-    val commissionPercent = 0.006
-    val commissionConstant = 20_00U
-    return if ((sumPreviousTransfer + sumTransfer) < maxTransfer) {
+fun calculateMastercardMaestro(sumPreviousTransfer: UInt, sumTransfer: UInt) =
+    if ((sumPreviousTransfer + sumTransfer) < MAX_TRANSFER_MASTERCARD_MAESTRO) {
         0U
     } else {
-        (sumTransfer.toDouble() * commissionPercent + commissionConstant.toDouble()).toUInt()
+        (sumTransfer.toDouble() * COMMISSION_PERCENT_MASTERCARD_MAESTRO + COMMISSION_CONSTANT_MASTERCARD_MAESTRO.toDouble()).toUInt()
     }
-}
 
-fun calculateVisaMir(sumTransfer: UInt): UInt {
-    val commissionPercent = 0.0075
-    val commissionConstant = 35_00U
 
-    return if ((sumTransfer.toDouble() * commissionPercent) < commissionConstant.toDouble()) {
-        commissionConstant
+fun calculateVisaMir(sumTransfer: UInt) =
+    if ((sumTransfer.toDouble() * COMMISSION_PERCENT_VISA_MIR) < COMMISSION_CONSTANT_VISA_MIR.toDouble()) {
+        COMMISSION_CONSTANT_VISA_MIR
     } else {
-        (sumTransfer.toDouble() * commissionPercent).toUInt()
+        (sumTransfer.toDouble() * COMMISSION_PERCENT_VISA_MIR).toUInt()
     }
-}
 
-fun isAvailableLimits(typeOfCard: TypeOfCard, sumPreviousTransfer: UInt, sumTransfer: UInt): Boolean {
-    val limitOfCards = 600_000_00U
-    val limitVkPayDay = 40_000_00U
-    val limitVkPay = 15_000_00U
-    return when (typeOfCard) {
-        TypeOfCard.VK_PAY -> (sumPreviousTransfer + sumTransfer) <= limitVkPayDay && sumTransfer <= limitVkPay
-        else -> (sumPreviousTransfer + sumTransfer) <= limitOfCards
+
+fun isAvailableLimits(typeOfCard: TypeOfCard, sumPreviousTransfer: UInt, sumTransfer: UInt) =
+    when (typeOfCard) {
+        TypeOfCard.VK_PAY -> (sumPreviousTransfer + sumTransfer) <= LIMIT_VK_PAY_DAY && sumTransfer <= LIMIT_VK_PAY
+        else -> (sumPreviousTransfer + sumTransfer) <= LIMIT_OF_CARDS
     }
-}
+
 
