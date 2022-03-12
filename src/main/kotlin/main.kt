@@ -59,7 +59,14 @@ fun main() {
             continue
         }
 
-        val sumPrevious = sumPreviousTransfer(typeOfCard, sumMastercard, sumMaestro, sumVisa, sumMir, sumVkPay)
+        val sumPrevious = sumPreviousTransfer(
+            typeOfCard,
+            sumMastercard,
+            sumMaestro,
+            sumVisa,
+            sumMir,
+            sumVkPay
+        )
         if (!isAvailableLimits(
                 typeOfCard,
                 sumPrevious,
@@ -142,7 +149,7 @@ fun calculateVisaMir(sumTransfer: UInt) =
 
 
 fun isAvailableLimits(typeOfCard: TypeOfCard, sumPreviousTransfer: UInt, sumTransfer: UInt) =
-    when (typeOfCard) {
+     when (typeOfCard) {
         TypeOfCard.VK_PAY -> (sumPreviousTransfer + sumTransfer) <= LIMIT_VK_PAY_DAY && sumTransfer <= LIMIT_VK_PAY
         else -> (sumPreviousTransfer + sumTransfer) <= LIMIT_OF_CARDS
     }
