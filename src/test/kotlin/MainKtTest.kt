@@ -54,7 +54,6 @@ class MainKtTest {
         assertEquals(TypeOfCard.VK_PAY, result)
     }
 
-
     @Test
     fun sumPreviousTransferTest_Mastercard() {
         val typeOfCardTest: TypeOfCard = TypeOfCard.MASTERCARD
@@ -154,7 +153,6 @@ class MainKtTest {
         )
         assertEquals(sumVkPayTest, result)
     }
-
 
     @Test
     fun calculateCommissionTest_VkPay() {
