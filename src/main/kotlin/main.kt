@@ -17,6 +17,7 @@ fun main() {
     var typeOfCard: TypeOfCard
 
     while (true) {
+
         println(
             "Выберите способ перевода (введите порядковый номер): " + "\n" +
                     "1 Mastercard" + "\n" +
@@ -40,15 +41,9 @@ fun main() {
             continue
         }
 
+        if (typeOfCardUerChoice == 6U) return
 
-        typeOfCard = when (typeOfCardUerChoice) {
-            1U -> TypeOfCard.MASTERCARD
-            2U -> TypeOfCard.MAESTRO
-            3U -> TypeOfCard.VISA
-            4U -> TypeOfCard.MIR
-            5U -> TypeOfCard.VK_PAY
-            else -> break
-        }
+        typeOfCard = defineTypeOfCard(typeOfCardUerChoice)
 
         print("Введите сумму перевода в копейках: ")
         val sumTransfer: UInt
@@ -85,6 +80,7 @@ fun main() {
 
         println("Комиссия: ${(totalCommission / 100U)} рублей ${totalCommission % 100U} копеек")
 
+
         when (typeOfCard) {
             TypeOfCard.MASTERCARD -> sumMastercard += sumTransfer
             TypeOfCard.MAESTRO -> sumMaestro += sumTransfer
@@ -100,6 +96,16 @@ fun main() {
                     "VK Pay = $sumVkPay"
         )
     }
+}
+
+
+fun defineTypeOfCard(typeOfCardUerChoice: UInt) = when (typeOfCardUerChoice) {
+    1U -> TypeOfCard.MASTERCARD
+    2U -> TypeOfCard.MAESTRO
+    3U -> TypeOfCard.VISA
+    4U -> TypeOfCard.MIR
+    else -> TypeOfCard.VK_PAY
+
 }
 
 
@@ -149,7 +155,7 @@ fun calculateVisaMir(sumTransfer: UInt) =
 
 
 fun isAvailableLimits(typeOfCard: TypeOfCard, sumPreviousTransfer: UInt, sumTransfer: UInt) =
-     when (typeOfCard) {
+    when (typeOfCard) {
         TypeOfCard.VK_PAY -> (sumPreviousTransfer + sumTransfer) <= LIMIT_VK_PAY_DAY && sumTransfer <= LIMIT_VK_PAY
         else -> (sumPreviousTransfer + sumTransfer) <= LIMIT_OF_CARDS
     }

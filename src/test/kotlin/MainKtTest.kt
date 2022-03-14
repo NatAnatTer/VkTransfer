@@ -3,9 +3,57 @@ import org.junit.Test
 
 class MainKtTest {
 
+
     @Test
-    fun main() {
+    fun defineTypeOfCardTest_Mastercard() {
+        val typeOfCardUerChoiceTest: UInt = 1U
+
+        val result = defineTypeOfCard(
+            typeOfCardUerChoice = typeOfCardUerChoiceTest
+        )
+        assertEquals(TypeOfCard.MASTERCARD, result)
     }
+
+    @Test
+    fun defineTypeOfCardTest_Maestro() {
+        val typeOfCardUerChoiceTest: UInt = 2U
+
+        val result = defineTypeOfCard(
+            typeOfCardUerChoice = typeOfCardUerChoiceTest
+        )
+        assertEquals(TypeOfCard.MAESTRO, result)
+    }
+
+    @Test
+    fun defineTypeOfCardTest_Visa() {
+        val typeOfCardUerChoiceTest: UInt = 3U
+
+        val result = defineTypeOfCard(
+            typeOfCardUerChoice = typeOfCardUerChoiceTest
+        )
+        assertEquals(TypeOfCard.VISA, result)
+    }
+
+    @Test
+    fun defineTypeOfCardTest_Mir() {
+        val typeOfCardUerChoiceTest: UInt = 4U
+
+        val result = defineTypeOfCard(
+            typeOfCardUerChoice = typeOfCardUerChoiceTest
+        )
+        assertEquals(TypeOfCard.MIR, result)
+    }
+
+    @Test
+    fun defineTypeOfCardTest_Vk_Pay() {
+        val typeOfCardUerChoiceTest: UInt = 5U
+
+        val result = defineTypeOfCard(
+            typeOfCardUerChoice = typeOfCardUerChoiceTest
+        )
+        assertEquals(TypeOfCard.VK_PAY, result)
+    }
+
 
     @Test
     fun sumPreviousTransferTest_Mastercard() {
@@ -107,10 +155,148 @@ class MainKtTest {
         assertEquals(sumVkPayTest, result)
     }
 
-    //    @Test
-//    fun calculateCommission() {
-//    }
-//
+
+    @Test
+    fun calculateCommissionTest_VkPay() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.VK_PAY
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 14_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(0U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Mastercard_UnderLimit() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MASTERCARD
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 14_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(0U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Mastercard_OverLimit() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MASTERCARD
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 100_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(620_00U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Maestro_UnderLimit() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MAESTRO
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 14_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(0U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Maestro_OverLimit() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MAESTRO
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 100_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(620_00U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Visa_UnderMinSum_FailedTest() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.VISA
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 1_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(25_00U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Visa_OverMinSum() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.VISA
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 100_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(750_00U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Mir_UnderMinSum() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MIR
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 1_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(35_00U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_Mir_OverMinSum() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MIR
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 100_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(750_00U, result)
+    }
+
+    @Test
+    fun calculateCommissionTest_VkPay_Default() {
+
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 100_000_00U
+
+        val result = calculateCommission(
+
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(0U, result)
+    }
+
+
     @Test
     fun calculateMastercardMaestroTest_UnderLimit() {
         val sumPreviousTransferTest: UInt = 40_000_00U
@@ -121,6 +307,7 @@ class MainKtTest {
         )
         assertEquals(0U, result)
     }
+
     @Test
     fun calculateMastercardMaestroTest_OverLimit() {
         val sumPreviousTransferTest: UInt = 40_000_00U
@@ -210,5 +397,18 @@ class MainKtTest {
             sumTransfer = sumTransferTest
         )
         assertEquals(true, result)
+    }
+
+    @Test
+    fun isAvailableLimitsTest_VkPay_OverLimitTransaction() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.VK_PAY
+        val sumPreviousTransferTest: UInt = 10_000_00U
+        val sumTransferTest: UInt = 19_000_00U
+        val result = isAvailableLimits(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(false, result)
     }
 }

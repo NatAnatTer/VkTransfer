@@ -1,6 +1,6 @@
 enum class TypeOfCard {
     MASTERCARD,
-   MAESTRO,
+    MAESTRO,
     VISA,
     MIR,
     VK_PAY
