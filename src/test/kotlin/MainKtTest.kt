@@ -226,19 +226,19 @@ class MainKtTest {
         assertEquals(620_00U, result)
     }
 
-//    @Test
-//    fun calculateCommissionTest_Visa_UnderMinSum_FailedTest() {
-//        val typeOfCardTest: TypeOfCard = TypeOfCard.VISA
-//        val sumPreviousTransferTest: UInt = 0U
-//        val sumTransferTest: UInt = 1_000_00U
-//
-//        val result = calculateCommission(
-//            typeOfCard = typeOfCardTest,
-//            sumPreviousTransfer = sumPreviousTransferTest,
-//            sumTransfer = sumTransferTest
-//        )
-//        assertEquals(25_00U, result)
-//    }
+    @Test
+    fun calculateCommissionTest_Visa_UnderMinSum() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.VISA
+        val sumPreviousTransferTest: UInt = 0U
+        val sumTransferTest: UInt = 1_000_00U
+
+        val result = calculateCommission(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(35_00U, result)
+    }
 
     @Test
     fun calculateCommissionTest_Visa_OverMinSum() {
@@ -337,14 +337,14 @@ class MainKtTest {
         assertEquals(750_00U, result)
     }
 
-//    @Test
-//    fun calculateVisaMirFailedTest_ComissionCalculated() {
-//        val sumTransferTest: UInt = 100_000_00U
-//        val result = calculateVisaMir(
-//            sumTransfer = sumTransferTest
-//        )
-//        assertEquals(7500_00U, result)
-//    }
+    @Test
+    fun calculateVisaMir_ComissionCalculated() {
+        val sumTransferTest: UInt = 100_000_00U
+        val result = calculateVisaMir(
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(750_00U, result)
+    }
 
 
     @Test
@@ -360,18 +360,18 @@ class MainKtTest {
         assertEquals(false, result)
     }
 
-//    @Test
-//    fun isAvailableLimitsFailedTest_MIR_UnderLimits() {
-//        val typeOfCardTest: TypeOfCard = TypeOfCard.MIR
-//        val sumPreviousTransferTest: UInt = 400_000_00U
-//        val sumTransferTest: UInt = 10_000_00U
-//        val result = isAvailableLimits(
-//            typeOfCard = typeOfCardTest,
-//            sumPreviousTransfer = sumPreviousTransferTest,
-//            sumTransfer = sumTransferTest
-//        )
-//        assertEquals(false, result)
-//    }
+    @Test
+    fun isAvailableLimits_MIR_UnderLimits() {
+        val typeOfCardTest: TypeOfCard = TypeOfCard.MIR
+        val sumPreviousTransferTest: UInt = 400_000_00U
+        val sumTransferTest: UInt = 10_000_00U
+        val result = isAvailableLimits(
+            typeOfCard = typeOfCardTest,
+            sumPreviousTransfer = sumPreviousTransferTest,
+            sumTransfer = sumTransferTest
+        )
+        assertEquals(true, result)
+    }
 
     @Test
     fun isAvailableLimitsTest_VkPay_OverLimitOfDay() {
